@@ -6,6 +6,17 @@ import (
 	"github.com/xjslang/xjs/token"
 )
 
+func ParseParam(p *parser.Parser) *ast.Identifier {
+	ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
+	if p.PeekToken.Type == token.COLON {
+		p.NextToken() // consume :
+		if !p.ExpectToken(token.IDENT) {
+			return nil
+		}
+	}
+	return ident
+}
+
 func ParseFunctionParameters(p *parser.Parser) []*ast.Identifier {
 	identifiers := []*ast.Identifier{}
 	if p.PeekToken.Type == token.RPAREN {
@@ -13,30 +24,11 @@ func ParseFunctionParameters(p *parser.Parser) []*ast.Identifier {
 		return identifiers
 	}
 	p.NextToken()
-	ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
-	identifiers = append(identifiers, ident)
-
-	// simply ignore the annotation types :)
-	if p.PeekToken.Type == token.COLON {
-		p.NextToken() // consume :
-		if !p.ExpectToken(token.IDENT) {
-			return nil
-		}
-	}
-
+	identifiers = append(identifiers, ParseParam(p))
 	for p.PeekToken.Type == token.COMMA {
 		p.NextToken()
 		p.NextToken()
-		ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
-		identifiers = append(identifiers, ident)
-
-		// simply ignore the annotation types :)
-		if p.PeekToken.Type == token.COLON {
-			p.NextToken() // consume :
-			if !p.ExpectToken(token.IDENT) {
-				return nil
-			}
-		}
+		identifiers = append(identifiers, ParseParam(p))
 	}
 	if !p.ExpectToken(token.RPAREN) {
 		return nil
