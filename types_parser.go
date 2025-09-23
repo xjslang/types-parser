@@ -15,11 +15,28 @@ func ParseFunctionParameters(p *parser.Parser) []*ast.Identifier {
 	p.NextToken()
 	ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
 	identifiers = append(identifiers, ident)
+
+	// simply ignore the annotation types :)
+	if p.PeekToken.Type == token.COLON {
+		p.NextToken() // consume :
+		if !p.ExpectToken(token.IDENT) {
+			return nil
+		}
+	}
+
 	for p.PeekToken.Type == token.COMMA {
 		p.NextToken()
 		p.NextToken()
 		ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
 		identifiers = append(identifiers, ident)
+
+		// simply ignore the annotation types :)
+		if p.PeekToken.Type == token.COLON {
+			p.NextToken() // consume :
+			if !p.ExpectToken(token.IDENT) {
+				return nil
+			}
+		}
 	}
 	if !p.ExpectToken(token.RPAREN) {
 		return nil

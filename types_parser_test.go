@@ -10,7 +10,7 @@ import (
 
 func TestXxx(t *testing.T) {
 	input := `
-	function printPoint(x, y) {
+	function printPoint(x: int, y: int) {
 		console.log(x, y)
 	}
 
