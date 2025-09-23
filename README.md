@@ -9,12 +9,14 @@ This plugin provides support for annotations in variables and function parameter
 ## Usage
 
 ```go
+package main
+
 import (
 	"fmt"
 
+	typesparser "github.com/xjslang/types-parser"
 	"github.com/xjslang/xjs/lexer"
 	"github.com/xjslang/xjs/parser"
-	"github.com/xjslang/types-parser"
 )
 
 func main() {
