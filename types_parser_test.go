@@ -10,8 +10,13 @@ import (
 
 func TestXxx(t *testing.T) {
 	input := `
+	function printPoint(x, y) {
+		console.log(x, y)
+	}
+
 	let x: int = 100
-	let y: int = 200`
+	let y: int = 200
+	printPoint(x, y)`
 	lb := lexer.NewBuilder()
 	p := parser.NewBuilder(lb).Install(Plugin).Build(input)
 	program, err := p.ParseProgram()
