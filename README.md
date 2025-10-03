@@ -9,14 +9,31 @@ This plugin provides support for annotations in variables and function parameter
 ## Usage
 
 ```go
+package main
+
 import (
-  "github.com/xjslang/xjs/parser"
-  "github.com/xjslang/pow-parser"
+	"fmt"
+
+	typesparser "github.com/xjslang/types-parser"
+	"github.com/xjslang/xjs/lexer"
+	"github.com/xjslang/xjs/parser"
 )
 
 func main() {
-  p := parser.NewParser()
-  powparser.InstallPlugin(p)
-  // Now the parser supports '**' as a power operator.
+	input := `
+	function printPoint(x: int, y: int) {
+		console.log(x, y)
+	}
+
+	let x: int = 100
+	let y: int = 200
+	printPoint(x, y)`
+	lb := lexer.NewBuilder()
+	p := parser.NewBuilder(lb).Install(typesparser.Plugin).Build(input)
+	program, err := p.ParseProgram()
+	if err != nil {
+		panic(fmt.Sprintf("ParseProgram() error: %q", err))
+	}
+	fmt.Println(program)
 }
 ```

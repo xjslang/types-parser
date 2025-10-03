@@ -8,12 +8,15 @@ import (
 
 func ParseParam(p *parser.Parser) *ast.Identifier {
 	ident := &ast.Identifier{Token: p.CurrentToken, Value: p.CurrentToken.Literal}
+
+	// simply ignore the annotation type :)
 	if p.PeekToken.Type == token.COLON {
 		p.NextToken() // consume :
 		if !p.ExpectToken(token.IDENT) {
 			return nil
 		}
 	}
+
 	return ident
 }
 
@@ -48,7 +51,7 @@ func Plugin(pb *parser.Builder) {
 			return nil
 		}
 
-		// simply ignore the annotation types :)
+		// simply ignore the annotation type :)
 		if p.PeekToken.Type == token.COLON {
 			p.NextToken() // consume :
 			if !p.ExpectToken(token.IDENT) {
